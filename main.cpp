@@ -673,6 +673,6 @@ using v2d = ztk::vec2<double>;
 
 int main() {
     
-    
+    cout << "changed" << endl;
 
 }
