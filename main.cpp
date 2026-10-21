@@ -646,10 +646,12 @@ namespace ztk {
             return l.x==r.x && l.y==r.y;
         }
         friend bool operator<(const vec2<T> &l, const vec2<T> &r){
-            return atan2(l.y,l.x) < atan2(r.y,r.x);
+            if(l.x==r.x)return l.y<r.y;
+            else return l.x<r.x;
         }
         friend bool operator>(const vec2<T> &l, const vec2<T> &r){
-            return atan2(l.y,l.x) > atan2(r.y,r.x);
+            if(l.x==r.x)return l.y>r.y;
+            else return l.x>r.x;
         }
         friend bool operator<=(const vec2<T> &l, const vec2<T> &r){
             return l<r || l==r;
