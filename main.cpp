@@ -646,12 +646,28 @@ namespace ztk {
             return l.x==r.x && l.y==r.y;
         }
         friend bool operator<(const vec2<T> &l, const vec2<T> &r){
-            if(l.x==r.x)return l.y<r.y;
-            else return l.x<r.x;
+            if(r==pair<T,T>({0,0}))return false;
+            else if(l==pair<T,T>({0,0}))return true;
+            if(((l.x<=0&&l.y<=0)||(0<l.x&&l.y<0)) == ((r.x<=0&&r.y<=0)||(0<r.x&&r.y<0))){
+                T cross = l.x*r.y - l.y*r.x;
+                if(0<cross)return true;
+                else if(cross<0)return false;
+                else return abs(l.x)+abs(l.y)<abs(r.x)+abs(r.y);
+            }else{
+                return (l.x<=0&&l.y<=0)||(0<l.x&&l.y<0);
+            }
         }
         friend bool operator>(const vec2<T> &l, const vec2<T> &r){
-            if(l.x==r.x)return l.y>r.y;
-            else return l.x>r.x;
+            if(l==pair<T,T>({0,0}))return false;
+            else if(r==pair<T,T>({0,0}))return true;
+            if(((r.x<=0&&r.y<=0)||(0<r.x&&r.y<0)) == ((l.x<=0&&l.y<=0)||(0<l.x&&l.y<0))){
+                T cross = r.x*l.y - r.y*l.x;
+                if(0<cross)return true;
+                else if(cross<0)return false;
+                else return abs(r.x)+abs(r.y)<abs(l.x)+abs(l.y);
+            }else{
+                return (r.x<=0&&r.y<=0)||(0<r.x&&r.y<0);
+            }
         }
         friend bool operator<=(const vec2<T> &l, const vec2<T> &r){
             return l<r || l==r;
