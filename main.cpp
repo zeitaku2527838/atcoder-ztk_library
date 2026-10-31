@@ -19,7 +19,6 @@ using deql = deque<ll>;
 template <class T> using pque/*降順*/ = priority_queue<T>;
 template <class T> using rpque/*昇順*/ = priority_queue<T, vector<T>, greater<T>>;
 #define rep(i,n) for(ll i=0; i<n; i++)
-#define rep2(i,l,r) for(ll i=l; i<r; i++)
 #define pushb push_back
 #define popb pop_back
 #define pushf push_front
