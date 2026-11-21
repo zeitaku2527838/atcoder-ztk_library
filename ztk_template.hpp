@@ -54,7 +54,7 @@ ll gcd(ll n, ll m)/*正整数n,mの最大公約数(n,mの大小を問わない)*
 ll randll(ll n)/*シード値をnとする一様非負整数乱数*/{mt19937_64 mt(n);uniform_int_distribution<ll> dis((ll)0,0x7fffffffffffffff);return dis(mt);}
 ll clockll()/*ll用の現在時刻[ns](初期時刻は不定)*/{return (chrono::duration_cast<chrono::nanoseconds>(chrono::steady_clock::now().time_since_epoch())).count();}
 namespace ztk {
-    template <class T> class sorted_vector {
+    template <class T, auto cmp> class sorted_vector {
         private:
             ll root = -1;
             struct node {
@@ -69,9 +69,9 @@ namespace ztk {
                 if(!tree[p].value.has_value()){
                     return p;
                 }else{
-                    if(v.value() < tree[p].value.value()){
+                    if(cmp(v.value(),tree[p].value.value())){
                         return search(tree[p].left, v);
-                    }else if(tree[p].value.value() < v.value()){
+                    }else if(cmp(tree[p].value.value(),v.value())){
                         return search(tree[p].right, v);
                     }else{
                         return p;
@@ -82,7 +82,7 @@ namespace ztk {
                 if(!tree[p].value.has_value()){
                     return p;
                 }else{
-                    if(v.value() < tree[p].value.value()){
+                    if(cmp(v.value(), tree[p].value.value())){
                         return search_next(tree[p].left, v);
                     }else{
                         return search_next(tree[p].right, v);
@@ -260,14 +260,14 @@ namespace ztk {
                 if(root==-1) return;
                 ll p = search(root,v);
                 if(!tree[p].value.has_value()) return;
-                if(v == tree[p].value.value()){
+                if(!cmp(v,tree[p].value.value()) && !cmp(tree[p].value.value(),v)){
                     remove(p);
                 }
             }
             ll lower_bound(const_reference v){
                 ll res = 0, p = root;
                 while(p!=-1 && tree[p].value.has_value()){
-                    if(v <= tree[p].value){
+                    if(!cmp(tree[p].value.value(),v)){
                         p = tree[p].left;
                     }else{
                         res += tree[p].size/2;
@@ -280,7 +280,7 @@ namespace ztk {
             ll upper_bound(const_reference v){
                 ll res = 0, p = root;
                 while(p!=-1 && tree[p].value.has_value()){
-                    if(v < tree[p].value){
+                    if(cmp(v,tree[p].value.value())){
                         p = tree[p].left;
                     }else{
                         res += tree[p].size/2;
@@ -290,7 +290,7 @@ namespace ztk {
                 }
                 return res;
             }
-            reference operator[](size_type ix){
+            const_reference operator[](size_type ix){
                 ll p = root;
                 ll ac=0, wa=tree[root].size/2;
                 while(ac+1<wa){
